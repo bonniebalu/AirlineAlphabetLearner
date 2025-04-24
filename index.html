@@ -5,18 +5,47 @@
 	<!-- Page creating by Bonnie Balu --> 
 	<!-- Run by simply opening page in a browser and hitting Next button or Refresh (F5) to go through letters --> 
     <style>
-      .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-      }
+	.container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 20px;
+	}
 
-      .letter {
-        font-size: 200px;
-        margin: 0;
-      }
+	.letter {
+		font-size: 200px;
+		margin: 0;
+	}	  
+	  
+	.codename {
+		font-size: 20px;
+	}
+	  
+	Button {
+		width: 150px;
+		padding: 5px;
+	}
+		
+	@media only screen and (max-width: 600px) {	  
+		.container {
+			position:absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;			
+			padding-bottom: 40px;
+		}
+		
+		.codename {
+			font-size: 40px;
+		}	  
+		
+		Button {
+			width: 80%;
+			height: 50px;
+			padding: 5px;
+		}
+	}
     </style>
   </head>
 <body>  
@@ -24,27 +53,26 @@
   <p><a href="https://en.wikipedia.org/wiki/NATO_phonetic_alphabet">https://en.wikipedia.org/wiki/NATO_phonetic_alphabet</a></p>
 
   <div class="container">
-    <h1 id="demo" class="letter"></h1>
-    <span id="codename" style="visibility:hidden"></span>
-    <Button id="revealBtn" style="width:100px" onClick="revealFn()">Reveal</Button>
-    <Button style="width:100px" onClick="refresh()">Next</Button>
+    <h1 id="letter-id" class="letter"></h1>
+    <span id="codename-id" class="codename" style="visibility:hidden"></span>
+    <Button id="revealBtn" onClick="revealFn()">Reveal</Button>
+    <Button onClick="refresh()">Next</Button>
   </div>
 
   <script>
     var alphabet = ['Alfa', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel', 'India', 'Juliett', 'Kilo', 'Lima', 'Mike',
       'November', 'Oscar', 'Papa', 'Quebec', 'Romeo', 'Sierra', 'Tango', 'Uniform', 'Victor', 'Whiskey', 'Xray', 'Yankee', 'Zulu'];
 
-    const rand = Math.floor(Math.random() * 26);
-    //const rand = Math.floor(Math.random() * 10) + 1;
+    const rand = Math.floor(Math.random() * 26);    
     let letter = alphabet[rand];
 
-    document.getElementById("demo").innerHTML = letter[0];
-    document.getElementById("codename").innerHTML = letter;
+    document.getElementById("letter-id").innerHTML = letter[0];
+    document.getElementById("codename-id").innerHTML = letter;
 
     document.getElementById("revealBtn").focus();
 
     function revealFn() {
-      document.getElementById("codename").setAttribute('style', 'visibility:visible');
+      document.getElementById("codename-id").setAttribute('style', 'visibility:visible');
     };
 
     function refresh() {
