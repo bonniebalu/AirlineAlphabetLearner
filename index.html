@@ -2,88 +2,137 @@
 <html>
   <head>
     <title>Aviation Alphabet</title>
-	<!-- Page creating by Bonnie Balu --> 
-	<!-- Run by simply opening page in a browser and hitting Next button or Refresh (F5) to go through letters --> 
-    <style>
-		.container {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			gap: 20px;
-		}
+    <!-- Page created by Bonnie Balu -->
+    <!-- Run by simply opening page in a browser and hitting Next button or Refresh (F5) to go through letters. Screen reader assibility supported -->
 
-		.letter {
-			font-size: 200px;
-			margin: 0;
-		}	  
-	  
-	  .codename {
-			font-size: 20px;
-	  }
-	  
-	  Button {
-			width: 150px;
-			padding: 5px;
-	  }
-		
-		@media only screen and (max-width: 900px) {	  
-			.container {
-				position:absolute;
-				bottom: 0;
-				left: 0;
-				right: 0;			
-				padding-bottom: 40px;
-			}
-			
-			.letter {
-				font-size: 60vw;
-			}
-			
-			.codename {
-				font-size: 10vw;
-			}	  
-			
-			Button {
-				width: 80%;
-				height: 100px;
-				padding: 5px;
-				font-size: xx-large;
-			}
-		}
+    <style>
+      .container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        align-content: center;
+      }
+
+      .letter-container {
+        align-content: center;
+
+        .letter {
+          font-size: 200px;
+          margin: 0;
+        }
+
+        .codename {
+          font-size: 20px;
+          height: 23px;
+        }
+      }
+
+      .button-container {
+        width: 100%;
+        text-align: -webkit-center;
+
+        Button {
+          width: 150px;
+          padding: 5px;
+          margin: 15px;
+          display: block;
+        }
+      }
+
+      @media only screen and (max-width: 900px) {
+        .container {
+          position:absolute;
+          display: flex;
+          flex-direction: column;
+	}
+	      
+        .letter-container {
+          height: 100%;
+          flex-grow: 1;
+	
+          .letter {
+            font-size: 60vw;
+          }
+	
+          .codename {
+            font-size: 10vw;
+          }
+        }        
+
+        .button-container {
+          Button {
+            width: calc(100% - 40px);
+            height: 100px;
+            margin: 0 20px 20px 20px;
+            font-size: xx-large;
+            flex-grow: 0;
+          }
+        }
+      }
     </style>
   </head>
-<body>  
-  <h1>Aviation Alphabet Learner</h1>
-  <p><a href="https://en.wikipedia.org/wiki/NATO_phonetic_alphabet">https://en.wikipedia.org/wiki/NATO_phonetic_alphabet</a></p>
+<body>
+  <h1><a href="https://en.wikipedia.org/wiki/NATO_phonetic_alphabet">Aviation Alphabet</a> Learner</h1>
 
   <div class="container">
-    <h1 id="letter-id" class="letter"></h1>
-    <span id="codename-id" class="codename" style="visibility:hidden"></span>
-    <Button id="revealBtn" onClick="revealFn()">Reveal</Button>
-    <Button onClick="refresh()">Next</Button>
+    <div class="letter-container">
+      <h2 id="letter-id" class="letter" tabindex="0" aria-describedby="codename-id"></h2>
+      <div id="codename-id" class="codename" aria-hidden="true" style="visibility: hidden"></div>
+    </div>
+    <div class="button-container">
+      <Button onClick="getNextLetter()">Next</Button>
+      <Button onClick="reveal()">Reveal</Button>
+    </div>
   </div>
 
   <script>
-    var alphabet = ['Alfa', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel', 'India', 'Juliett', 'Kilo', 'Lima', 'Mike',
+    // VARIABLES
+    var aviationAlphabet = ['Alfa', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel', 'India', 'Juliett', 'Kilo', 'Lima', 'Mike',
       'November', 'Oscar', 'Papa', 'Quebec', 'Romeo', 'Sierra', 'Tango', 'Uniform', 'Victor', 'Whiskey', 'Xray', 'Yankee', 'Zulu'];
+    var currentIndex = 0;
 
-    const rand = Math.floor(Math.random() * 26);
-    //const rand = Math.floor(Math.random() * 10) + 1;
-    let letter = alphabet[rand];
-
-    document.getElementById("letter-id").innerHTML = letter[0];
-    document.getElementById("codename-id").innerHTML = letter;
-
-    document.getElementById("revealBtn").focus();
-
-    function revealFn() {
-      document.getElementById("codename-id").setAttribute('style', 'visibility:visible');
+    // FUNCTIONS
+    function scramble(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      console.log(array);
+      return array;
     };
 
-    function refresh() {
-      document.location.reload();
+    function reveal() {
+      const codeNameId = document.getElementById("codename-id");
+      codeNameId.innerText = aviationAlphabet[currentIndex];
+      codeNameId.style.visibility = "visible";
+
+      document.getElementById("letter-id").focus();
+    };
+
+    function getNextLetter() {
+      currentIndex++;
+
+      if (currentIndex >= aviationAlphabet.length) {
+        scramble(aviationAlphabet);
+        currentIndex = 0;
+      }
+
+      const codeNameId = document.getElementById("codename-id")
+      codeNameId.style.visibility = "hidden";
+      codeNameId.innerText = "";
+
+      const letterId = document.getElementById("letter-id");
+      letterId.innerText = aviationAlphabet[currentIndex][0];
+
+      document.getElementById("letter-id").focus();
     }
+
+    // MAIN CODE
+    scramble(aviationAlphabet);
+    getNextLetter();
   </script>
 </body>
 </html>
